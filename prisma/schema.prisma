@@ -1,0 +1,15 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+enum Role { user moderator admin owner }
+enum TxStatus { pending confirmed failed queued sent }
+model User { id String @id @default(uuid()) email String @unique passwordHash String role Role @default(user) displayName String? avatarUrl String? isSuspended Boolean @default(false) createdAt DateTime @default(now()) wallets Wallet[] transactions Transaction[] auditLogs AuditLog[] stakes StakePosition[] }
+model Wallet { id String @id @default(uuid()) userId String user User @relation(fields:[userId], references:[id]) token String address String @unique encryptedPrivateKey String? balance Decimal @default(0) locked Decimal @default(0) }
+model Transaction { id String @id @default(uuid()) userId String? user User? @relation(fields:[userId], references:[id]) kind String token String amount Decimal status TxStatus txHash String? confirmations Int @default(0) metadata Json? createdAt DateTime @default(now()) }
+model PlatformConfig { key String @id value Json updatedById String? updatedAt DateTime @updatedAt }
+model Table { id String @id @default(uuid()) name String gameType String smallBlind Decimal bigBlind Decimal minBuyIn Decimal maxBuyIn Decimal status String seats Int hands Hand[] }
+model Hand { id String @id @default(uuid()) tableId String table Table @relation(fields:[tableId], references:[id]) seedCommitment String pot Decimal rake Decimal state Json startedAt DateTime @default(now()) endedAt DateTime? actions GameAction[] }
+model GameAction { id String @id @default(uuid()) handId String hand Hand @relation(fields:[handId], references:[id]) userId String action String amount Decimal? createdAt DateTime @default(now()) }
+model Tournament { id String @id @default(uuid()) name String startsAt DateTime buyIn Decimal fee Decimal status String blindSchedule Json registrations TournamentRegistration[] }
+model TournamentRegistration { id String @id @default(uuid()) tournamentId String tournament Tournament @relation(fields:[tournamentId], references:[id]) userId String stack Decimal }
+model StakePosition { id String @id @default(uuid()) userId String user User @relation(fields:[userId], references:[id]) token String amount Decimal since DateTime rewardsClaimed Decimal @default(0) }
+model AuditLog { id String @id @default(uuid()) actorId String? actor User? @relation(fields:[actorId], references:[id]) eventType String targetType String? targetId String? ip String? details Json createdAt DateTime @default(now()) }
