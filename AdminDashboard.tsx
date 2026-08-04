@@ -1,0 +1,3 @@
+export function AdminDashboard() {
+  return <main className="space-y-6"><h1>Owner & Admin Dashboard</h1><section className="grid md:grid-cols-4 gap-4"><div>Active users</div><div>Active tables</div><div>Total rake collected</div><div>Total staked</div></section><form><label>Rake percentage (1-25)<input type="number" min={1} max={25} name="rakePercent" /></label><button>Save rake</button></form><section><h2>Controls</h2><ul><li>Supported tokens and wallet addresses</li><li>Tournament scheduling</li><li>User bans and role management</li><li>Staking APY, tiers, and bonus schedules</li><li>Game, finance, and security event logs</li></ul></section></main>;
+}
