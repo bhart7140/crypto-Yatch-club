@@ -1,0 +1,4 @@
+export type Seat = { id: string; name: string; avatarUrl?: string; chips: string; active?: boolean };
+export function PokerTable({ seats, pot }: { seats: Seat[]; pot: string }) {
+  return <section className="rounded-3xl bg-emerald-950 p-4 text-white shadow-xl"><header className="text-center">Pot: {pot}</header><div className="grid grid-cols-2 gap-3 md:grid-cols-3">{seats.map(s => <article key={s.id} className={s.active ? 'ring-2 ring-amber-300 rounded-xl p-3' : 'rounded-xl p-3'}><img src={s.avatarUrl ?? '/avatar.svg'} alt="" className="h-12 w-12 rounded-full"/><strong>{s.name}</strong><p>{s.chips} chips</p></article>)}</div><footer className="mt-4 flex flex-wrap gap-2 justify-center"><button>Fold</button><button>Check/Call</button><button>Raise</button><span aria-live="polite">Decision timer: 20s</span></footer></section>;
+}
